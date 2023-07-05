@@ -101,32 +101,19 @@ PLUGIN_DATA Plugin_StringFinder(unsigned char *p_pcData, unsigned int p_nSize, s
 
 	vector<string> searchStrings = Utils::SplitString(p_sConfigData, ",");
 	for(size_t x = 0; x < searchStrings.size(); x++) searchStrings[x] = Utils::ToLower(searchStrings[x]);
-	vector<string> lineStrings = Utils::SplitString((char *)p_pcData, "\n");
 
-	// Find strings
+	string allStrings = (char *)p_pcData;
 
-	for(size_t y = 0; y < lineStrings.size(); y++)
+	bool bFound = false;
+	for (size_t j = 0; j < searchStrings.size(); j++)
 	{
-		bool bFound = false;
-		
-		for(size_t i = 0; i < lineStrings[y].length(); i++)
+		if (allStrings.find(searchStrings[j]) != string::npos)
 		{
-			string Tmp = Utils::ToLower((char *)(lineStrings[y].c_str() + i));
-
-			for(size_t j = 0; j < searchStrings.size(); j++)
-			{
-				if(Tmp.substr(0, searchStrings[j].length()).compare(searchStrings[j]) == 0) 
-				{
-					Utils::WriteToTempFile("StringFinder.txt", (unsigned char *)lineStrings[y].c_str(), lineStrings[y].length());
-					Utils::WriteToTempFile("StringFinder.txt", (unsigned char *)"\r\n\r\n", 4);
-					bFound = true;
-					break;
-				}
-			}
-
-			// Write only once
-
-			if(bFound == true) break;
+			Utils::WriteToTempFile("StringFinder.txt", (unsigned char*)"\r\n\r\n", 4);
+			Utils::WriteToTempFile("StringFinder.txt", (unsigned char*)allStrings.c_str(), allStrings.length());
+			Utils::WriteToTempFile("StringFinder.txt", (unsigned char*)"\r\n\r\n", 4);
+			bFound = true;
+			break;
 		}
 	}
 	
