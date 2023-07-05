@@ -37,6 +37,7 @@ public:
 
 	static string ToLower(string p_sString);
 	static string ToPrintable(const char *p_pcString, size_t p_nLength);
+	static string GetProcessName();
 	static string IntToString(unsigned int p_nNumer);
 	static string IntToHex(unsigned int p_nNumer);
 	static unsigned int StringToInt(string p_sNumer);

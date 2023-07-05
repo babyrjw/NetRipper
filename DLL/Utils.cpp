@@ -32,6 +32,32 @@ string Utils::ToPrintable(const char *p_pcString, size_t p_nLength)
 	return result;
 }
 
+string Utils::GetProcessName() 
+{
+	static string processName;
+	char pcBuffer[MAX_TEMP_PATH] = { 0 };
+
+	if (processName.empty()) {
+		if (GetModuleFileName(NULL, pcBuffer, MAX_TEMP_PATH) == 0)
+		{
+			DebugLog::DebugError("[ERROR] Cannot get current process name!");
+		}
+		else
+		{
+			// Get filename only
+
+			string sFullPath = pcBuffer;
+
+			size_t i = sFullPath.find_last_of('\\');
+			if (i != string::npos)
+				sFullPath = sFullPath.substr(i + 1);
+
+			processName = Utils::ToLower(sFullPath);
+		}
+	}
+	return processName;
+}
+
 // Get filename: PID_processname_filename
 
 string Utils::GetFilename(string p_sFilename)
@@ -41,26 +67,10 @@ string Utils::GetFilename(string p_sFilename)
 
 	// Get module name
 
-	sResult = Utils::IntToString(GetCurrentProcessId());
-	sResult += "_";
+	//sResult = Utils::IntToString(GetCurrentProcessId());
+	//sResult += "_";
 
-	if(GetModuleFileName(NULL, pcBuffer, MAX_TEMP_PATH) == 0)
-	{
-		DebugLog::DebugError("[ERROR] Cannot get current module name!");
-		sResult += "NetRipper.txt";
-	}
-	else 
-	{
-		// Get filename only
-
-		string sFullPath = pcBuffer;
-		
-		size_t i = sFullPath.find_last_of('\\');
-		if (i != string::npos)
-			sFullPath = sFullPath.substr(i+1); 
-		
-		sResult += sFullPath;
-	}
+	sResult += GetProcessName();
 
 	// Add filename
 

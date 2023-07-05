@@ -5,12 +5,19 @@
 string DebugLog::s_sFolder       = "";
 string DebugLog::s_sFilename     = "NetRipperLog.txt";
 bool   DebugLog::s_bAddProcessID = false;
+bool   DebugLog::s_bAddProcessName = true;
 
 // Initialization
 
 void DebugLog::Init()
 {
 	s_sFolder = DynConfig::GetDataPath();
+	for (const auto& entry : filesystem::directory_iterator(s_sFolder))
+	{
+		if (entry.path().string().find(Utils::GetProcessName()) != string::npos) {
+			std::filesystem::remove(entry);
+		}
+	}
 }
 
 // Log string
@@ -63,6 +70,12 @@ void DebugLog::Log(const char *p_pc_Data, size_t p_nLength)
 	if(DebugLog::s_bAddProcessID == true)
 	{
 		sFilename = sFilename + Utils::IntToString(GetCurrentProcessId());
+		sFilename = sFilename + "_";
+	}
+
+	if (DebugLog::s_bAddProcessName == true)
+	{
+		sFilename = sFilename + Utils::GetProcessName();
 		sFilename = sFilename + "_";
 	}
 

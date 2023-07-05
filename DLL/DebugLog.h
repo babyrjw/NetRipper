@@ -4,6 +4,8 @@
 
 #include <string>
 #include <cstdio>
+#include <cstdlib>
+#include <filesystem>
 #include "Utils.h"
 #include "DynConfig.h"
 
@@ -18,7 +20,7 @@ class DebugLog
 	static string s_sFolder;
 	static string s_sFilename;
 	static bool s_bAddProcessID;
-	
+	static bool s_bAddProcessName;
 public:
 
 	static void Init();

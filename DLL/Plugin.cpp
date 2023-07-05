@@ -110,7 +110,7 @@ PLUGIN_DATA Plugin_StringFinder(unsigned char *p_pcData, unsigned int p_nSize, s
 		if (allStrings.find(searchStrings[j]) != string::npos)
 		{
 			Utils::WriteToTempFile("StringFinder.txt", (unsigned char*)"\r\n\r\n", 4);
-			Utils::WriteToTempFile("StringFinder.txt", (unsigned char*)allStrings.c_str(), allStrings.length());
+			Utils::WriteToTempFile("StringFinder.txt", (unsigned char*)allStrings.c_str(), p_nSize);
 			Utils::WriteToTempFile("StringFinder.txt", (unsigned char*)"\r\n\r\n", 4);
 			bFound = true;
 			break;

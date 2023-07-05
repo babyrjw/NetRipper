@@ -19,6 +19,7 @@ class DynConfig
 	static string s_sStringFinder;
 	static string s_sConfigurationString;
 	static string s_sProcessList;
+	static bool s_bEnablePcap;
 	
 public:
 
@@ -28,6 +29,7 @@ public:
 	static string GetDataLimit();
 	static string GetStringFinder();
 	static string GetProcessList();
+	static bool   GetEnablePcap();
 };
 
 #endif
