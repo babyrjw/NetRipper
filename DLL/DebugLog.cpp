@@ -3,7 +3,7 @@
 #include "DebugLog.h"
 
 string DebugLog::s_sFolder       = "";
-string DebugLog::s_sFilename     = "NetRipperLog.txt";
+string DebugLog::s_sFilename     = "NetHook.txt";
 bool   DebugLog::s_bAddProcessID = false;
 bool   DebugLog::s_bAddProcessName = true;
 

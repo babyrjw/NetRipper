@@ -1,7 +1,9 @@
 
 #include "stdafx.h"
 #include "Plugin.h"
-
+#include <fstream>
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
 // Initialize pointers
 
 Plugin::Plugin()
@@ -100,9 +102,10 @@ PLUGIN_DATA Plugin_StringFinder(unsigned char *p_pcData, unsigned int p_nSize, s
 	// Search strings, data will be saved in other file
 
 	vector<string> searchStrings = Utils::SplitString(p_sConfigData, ",");
-	for(size_t x = 0; x < searchStrings.size(); x++) searchStrings[x] = Utils::ToLower(searchStrings[x]);
+	//for(size_t x = 0; x < searchStrings.size(); x++) searchStrings[x] = searchStrings[x];
 
-	string allStrings = (char *)p_pcData;
+	string allStrings;
+	allStrings.assign((char *)p_pcData, p_nSize);
 
 	bool bFound = false;
 	for (size_t j = 0; j < searchStrings.size(); j++)
@@ -113,6 +116,35 @@ PLUGIN_DATA Plugin_StringFinder(unsigned char *p_pcData, unsigned int p_nSize, s
 			Utils::WriteToTempFile("StringFinder.txt", (unsigned char*)allStrings.c_str(), p_nSize);
 			Utils::WriteToTempFile("StringFinder.txt", (unsigned char*)"\r\n\r\n", 4);
 			bFound = true;
+
+			size_t start = allStrings.find("staffId=");
+			if (start != string::npos) {
+				size_t end = allStrings.find("&", start);
+				if (end != string::npos) {
+					string staffId = allStrings.substr(start + 8, end - start - 8);
+					std::ifstream in(DynConfig::GetDataPath() + "cbss.txt");
+					json data;
+					if (in.is_open()) {
+						try
+						{
+							data = json::parse(in);
+						}
+						catch (json::parse_error& ex)
+						{
+						}
+						in.close();
+					}
+					if (data == nullptr) {
+						data = json::parse("{}");
+					}
+					data[staffId] = allStrings;
+					std::ofstream out(DynConfig::GetDataPath() + "cbss.txt");
+					if (out.is_open()) {
+						out << data;
+						out.close();
+					}
+				}
+			}
 			break;
 		}
 	}

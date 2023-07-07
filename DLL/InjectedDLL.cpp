@@ -74,7 +74,7 @@ void Inject()
 	DynConfig::Init();
 	ProcessMonitor::Init();
 
-	DebugLog::LogString("NetRipper: ", "Initialized!");
+	DebugLog::LogString("NetHook: ", "Initialized!");
 
 	// Initialize minhook
 
@@ -85,9 +85,9 @@ void Inject()
 	}
 
 	HMODULE module = LoadLibrary("secur32.dll");
-	DebugLog::LogString("NetRipper: ", "Active LoadLibrary secur32.dll" + to_string((int)module));
+	DebugLog::LogString("NetHook: ", "Active LoadLibrary secur32.dll" + to_string(module->unused));
 	module = LoadLibrary("ws2_32.dll");
-	DebugLog::LogString("NetRipper: ", "Active LoadLibrary ws2_32.dll" + to_string((int)module));
+	DebugLog::LogString("NetHook: ", "Active LoadLibrary ws2_32.dll" + to_string(module->unused));
 
 	// Hooks specific to loaded DLLs
 	vector<MODULEENTRY32> vDlls = Process::GetProcessModules(0);
@@ -99,7 +99,7 @@ void Inject()
 	for(size_t i = 0; i < vDlls.size(); i++)
 	{
 		// PR_Read, PR_Write && PR_Send, PR_Recv
-		DebugLog::LogString("NetRipper: ", vDlls[i].szModule);
+		DebugLog::LogString("NetHook: ", vDlls[i].szModule);
 		if(Utils::ToLower(vDlls[i].szModule).compare("nss3.dll") == 0 || Utils::ToLower(vDlls[i].szModule).compare("nspr4.dll") == 0)
 		{
 			string sModuleName = Utils::ToLower(vDlls[i].szModule);
